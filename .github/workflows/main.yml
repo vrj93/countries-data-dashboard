@@ -1,0 +1,80 @@
+name: Build Frontend and Backend
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Projects
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        folder:
+          - frontend
+          - backend
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Node.js for the specific folder
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22' # Change this based on your Node.js version
+
+      # Install dependencies
+      - name: Install Dependencies
+        working-directory: ${{ matrix.folder }}
+        run: npm install
+
+      # Build the project
+      - name: Build Project
+        working-directory: ${{ matrix.folder }}
+        run: npm run build
+
+      # Cache node_modules
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: ${{ matrix.folder }}/node_modules
+          key: ${{ runner.os }}-node_modules-${{ matrix.folder }}-${{ hashFiles(format('{0}/package-lock.json', matrix.folder)) }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-${{ matrix.folder }}-
+
+  test:
+    name: Run Tests
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        folder:
+          - frontend
+          - backend
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Node.js for the specific folder
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22' # Change this based on your Node.js version
+
+      # Install dependencies
+      - name: Install Dependencies
+        working-directory: ${{ matrix.folder }}
+        run: npm install
+
+      # Run tests
+      - name: Run Tests
+        working-directory: ${{ matrix.folder }}
+        run: npm test
