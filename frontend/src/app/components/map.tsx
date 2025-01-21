@@ -1,6 +1,6 @@
 'use client'
 
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import {GoogleMap, Marker} from "@react-google-maps/api";
 
 export const defaultMapContainerStyle = {
   width: '100%',
@@ -16,7 +16,11 @@ const defaultMapOptions = {
   mapTypeId: 'satellite',
 };
 
-const MapComponent = ({ coordinates }: any) => {
+interface MapComponentProps {
+  coordinates: number[]
+}
+
+const MapComponent = ({ coordinates }: MapComponentProps) => {
   const mapCenter = {
     lat: coordinates[0],
     lng: coordinates[1]
@@ -29,7 +33,7 @@ const MapComponent = ({ coordinates }: any) => {
         zoom={defaultMapZoom}
         options={defaultMapOptions}
         mapTypeId="roadmap">
-        <Marker position={mapCenter} />
+        <Marker position={mapCenter}/>
       </GoogleMap>
     </div>
   )

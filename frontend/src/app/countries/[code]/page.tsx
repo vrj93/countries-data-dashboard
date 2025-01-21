@@ -24,22 +24,26 @@ const fetchBorderCountries = async (borders: string[]): Promise<string[]> => {
 
   if (!apiUrl || !borders?.length) return [];
 
-  const borderPromises = borders.map(async (border) => {
+  const borderPromises = borders.map(async (border: string) => {
     const url = `${apiUrl}/countries/${border}`;
-    const res = await fetch(url);
-    if (res.ok) {
-      const data = await res.json();
-      return data.details.name.common;
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        return data.details.name.common;
+      }
+      return null;
+    } catch (err) {
+      throw err;
     }
-    return null;
   });
 
   const borderNames = await Promise.all(borderPromises);
   return borderNames.filter(Boolean);
 };
 
-const Page = async ({ params }: { params: { code: string } }) => {
-  const { code } = params;
+const Page = async ({ params }: { params: Promise<{ code: string }> }) => {
+  const { code } = await params;
   let country: any;
 
   try {
@@ -104,7 +108,7 @@ const Page = async ({ params }: { params: { code: string } }) => {
         {/* Map Section */}
         <div className='w-1/2 flex flex-row items-center justify-center'>
           <MapProvider>
-            <MapComponent coordinates={country.latlng} />
+            <MapComponent coordinates={ country?.latlng } />
           </MapProvider>
         </div>
       </div>
