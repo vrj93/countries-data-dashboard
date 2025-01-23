@@ -27,7 +27,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22' # Change this based on your Node.js version
+          node-version: '22'
+
+      # Use GitHub Actions secrets for the 'frontend' folder
+      - name: Setup Environment for Frontend
+        if: ${{ matrix.folder == 'frontend' }}
+        run: |
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ${{ matrix.folder }}/.env
+          echo "NEXT_PUBLIC_GOOGLE_MAP_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAP_KEY }}" >> ${{ matrix.folder }}/.env
 
       # Install dependencies
       - name: Install Dependencies
