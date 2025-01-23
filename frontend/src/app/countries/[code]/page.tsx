@@ -2,8 +2,9 @@ import Image from "next/image";
 import { MapProvider } from "@/app/components/mapProvider";
 import MapComponent from "@/app/components/map";
 import { notFound } from 'next/navigation';
+import {CountryDetailsInterface} from "@/app/interfaces/countryDetailsInterface";
 
-const fetchCountryDetails = async (code: string): Promise<any> => {
+const fetchCountryDetails = async (code: string): Promise<{ details: object }> => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   if (!apiUrl) throw new Error('Environment variable NEXT_PUBLIC_API_URL is not set!');
@@ -44,8 +45,7 @@ const fetchBorderCountries = async (borders: string[]): Promise<string[]> => {
 
 const Page = async ({ params }: { params: Promise<{ code: string }> }) => {
   const { code } = await params;
-  let country: any;
-
+  let country: Partial<CountryDetailsInterface>;
   try {
     const response = await fetchCountryDetails(code);
     country = response.details;
@@ -59,14 +59,14 @@ const Page = async ({ params }: { params: Promise<{ code: string }> }) => {
     notFound();
   }
 
-  return country?.name ? (
+  return country.name ? (
     <div className='w-full flex items-center justify-center'>
       <div className='w-[90%] flex flex-row my-4 items-center justify-center shadow-2xl rounded-xl'>
         {/* Country Info Section */}
         <div className='w-1/2 flex flex-row justify-center items-center'>
           <div className='aspect-[3/2] w-1/3 overflow-hidden relative'>
             <Image
-              src={country.flags.svg}
+              src={country.flags ? country.flags.svg: ''}
               alt={country.name.common}
               className="h-full w-full object-cover object-center"
               fill
@@ -106,11 +106,13 @@ const Page = async ({ params }: { params: Promise<{ code: string }> }) => {
         </div>
 
         {/* Map Section */}
-        <div className='w-1/2 flex flex-row items-center justify-center'>
-          <MapProvider>
-            <MapComponent coordinates={ country?.latlng } />
-          </MapProvider>
-        </div>
+        {country.latlng &&
+          <div className='w-1/2 flex flex-row items-center justify-center'>
+              <MapProvider>
+                  <MapComponent coordinates={country.latlng}/>
+              </MapProvider>
+          </div>
+        }
       </div>
     </div>
   ) : null;

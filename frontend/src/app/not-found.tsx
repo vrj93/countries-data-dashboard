@@ -15,7 +15,7 @@ const NotFoundPage: React.FC = () => {
           Oops! Page not found
         </p>
         <p className="mt-2 text-gray-500">
-          The page you are looking for doesn't exist or has been moved.
+          The page you are looking for doesn&apos;t exist or has been moved.
         </p>
         <button
           onClick={goHome}

@@ -17,7 +17,7 @@ const defaultMapOptions = {
 };
 
 interface MapComponentProps {
-  coordinates: number[]
+  coordinates: number[];
 }
 
 const MapComponent = ({ coordinates }: MapComponentProps) => {

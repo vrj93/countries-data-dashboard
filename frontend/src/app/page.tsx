@@ -23,14 +23,11 @@ const App = () => {
     setSearchSelect(e.target.value);
   };
 
-  const handleSearchValue = useCallback(
-    debounce((e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleSearchValue = debounce((e: React.ChangeEvent<HTMLInputElement>): void => {
       const val = e.target.value.trim();
       setSearchVal(val);
       setRegion('Select');
-    }, 500),
-    []
-  );
+    }, 500);
 
   const handleSearchRegion = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setRegion(e.target.value);
