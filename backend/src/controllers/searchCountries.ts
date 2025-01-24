@@ -11,7 +11,12 @@ const searchCountries = async (req: Request, res: Response) => {
 
   const fields = 'fields=name,cca2,flags,region,timezones';
   let url = '';
-  if(req.query.name) {
+  if(req.query.name && req.query.compare) {
+    console.log('yes');
+    const name = req.query.name;
+    url = `${apiUrl}/name/${name}?fullText=true`;
+  } else if (req.query.name) {
+    console.log('no');
     const name = req.query.name;
     url = `${apiUrl}/name/${name}?fullText=true&${fields}`;
   }
@@ -25,13 +30,11 @@ const searchCountries = async (req: Request, res: Response) => {
   }
 
   try {
-    console.log(url);
     const response = await axios.get(url);
     const countries = response.data;
 
     countries.forEach((country: countryInterface) => {
       const timezone = country.timezones[0];
-      console.log(timezone);
       const time = DateTime.now().setZone(timezone);
       country['time'] = time.toFormat('hh:mm a');
     });

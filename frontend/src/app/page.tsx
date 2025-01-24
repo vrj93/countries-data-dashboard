@@ -6,6 +6,7 @@ import countryInterface from "@/app/interfaces/countryInterface";
 import { debounce } from "lodash";
 import { LoaderProvider, useLoader } from "@/app/context/loaderContext";
 import FullPageLoader from "@/app/components/fullLoader";
+import {redirect} from "next/navigation";
 
 const App = () => {
   const [searchSelect, setSearchSelect] = useState<string>('name');
@@ -86,40 +87,45 @@ const App = () => {
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
-      <div className="w-9/12 h-full my-4 shadow-2xl">
+      <div className="flex flex-col w-9/12 h-full my-4 shadow-2xl">
         <header className="p-2 items-center text-center bg-gray-800 text-white rounded-t-lg">
           <h1 className="font-bold text-2xl">Welcome to Countries Data Dashboard!</h1>
         </header>
-        <div className="flex flex-row p-2 space-x-3 items-center justify-end bg-blue-400">
-          <div className="flex items-center">
-            <select
-              className="h-8 p-1 text-sm rounded-l-md bg-gray-300"
-              value={searchSelect}
-              onChange={handleSearchSelect}
-            >
-              <option value="name">By Name</option>
-              <option value="capital">By Capital</option>
-            </select>
-            <input
-              className="h-8 p-1 text-md rounded-r-md"
-              placeholder="Search"
-              onChange={handleSearchValue}
-            />
+        <div className="flex flex-row p-2 items-center justify-between bg-blue-400">
+          <div className='flex'>
+            <button className='btn bg-orange-400 p-1 rounded-lg' onClick={() => redirect('/countries/compare')}>Compare Countries</button>
           </div>
-          <div className="flex items-center">
-            <select
-              className="h-8 p-1 text-sm rounded-md bg-gray-300"
-              value={region}
-              onChange={handleSearchRegion}
-            >
-              <option value="Select">Select Region</option>
-              <option value="africa">Africa</option>
-              <option value="antarctic">Antarctic</option>
-              <option value="americas">Americas</option>
-              <option value="asia">Asia</option>
-              <option value="europe">Europe</option>
-              <option value="oceania">Oceania</option>
-            </select>
+          <div className='flex flex-row space-x-3'>
+            <div className="flex items-center">
+              <select
+                className="h-8 p-1 text-sm rounded-l-md bg-gray-300"
+                value={searchSelect}
+                onChange={handleSearchSelect}
+              >
+                <option value="name">By Name</option>
+                <option value="capital">By Capital</option>
+              </select>
+              <input
+                className="h-8 p-1 text-md rounded-r-md"
+                placeholder="Search"
+                onChange={handleSearchValue}
+              />
+            </div>
+            <div className="flex items-center justify-end">
+              <select
+                className="h-8 p-1 text-sm rounded-md bg-gray-300"
+                value={region}
+                onChange={handleSearchRegion}
+              >
+                <option value="Select">Select Region</option>
+                <option value="africa">Africa</option>
+                <option value="antarctic">Antarctic</option>
+                <option value="americas">Americas</option>
+                <option value="asia">Asia</option>
+                <option value="europe">Europe</option>
+                <option value="oceania">Oceania</option>
+              </select>
+            </div>
           </div>
         </div>
         {isLoading ? (
