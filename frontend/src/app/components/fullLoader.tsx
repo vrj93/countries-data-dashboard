@@ -1,6 +1,3 @@
-'use client';
-import React from 'react';
-
 const FullPageLoader = () => {
   return (
     <div className="relative inset-0 flex items-center justify-center bg-white z-50">
