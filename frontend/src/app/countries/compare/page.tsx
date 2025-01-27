@@ -42,7 +42,7 @@ const Page = () => {
         return;
       }
     } catch (err) {
-      alert('Something went wrong!');
+      alert(`Something went wrong!, ${err}`);
       return;
     }
   }, [searchValue]);
